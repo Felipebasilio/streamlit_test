@@ -22,7 +22,7 @@ st.text('UNIVERSIDADE FEDERAL DE MINAS GERAIS - INTRODUÇÃO A BANCO DE DADOS')
 st.text('ATIVIDADE EXTRA: streamlit')
 st.text('Grupo: \nAndre Luís da Costa - 2018020352\nFelipe da Cruz Basilio - 2018020530\nMilton Pereira Bravo Neto - 2018072549\nEduardo Gabriel Carvalho Marinho - 2018020549')
 st.title('Análise de dados\n')
-st.write('Nesse projeto vamos analisaras consultas realizadas no trabalho pelo grupo de forma dinâmica. A intenção não é variar todos os parâmetros de todas as pesquisas para poder fazer qualquer pesquisa e sim variar os campos utilizados nas clausulas WHERE propostas no trabalho')
+st.write('Nesse projeto vamos analisar as consultas realizadas no trabalho pelo grupo de forma dinâmica. A intenção não é variar todos os parâmetros de todas as pesquisas para poder fazer qualquer pesquisa e sim variar os campos utilizados nas clausulas WHERE propostas no trabalho')
 
 ## filtros para a tabela
 
@@ -37,17 +37,20 @@ def mostra_qntd_linhas(dataframe, keyParam):
 selectImportacao = """
 
 SELECT *
-FROM IMPORTACAO AS I
+FROM 
+    IMPORTACAO AS I
+    JOIN PAIS AS P ON I.pais=P.id
 
 """
 
 df_importacao = pd.read_sql_query(selectImportacao, conn)
 
-checkbox_mostrar_consulta_6_1_1= st.sidebar.checkbox('Mostrar consulta 6.1.1: Importações vindas do país com código 1.')
+checkbox_mostrar_consulta_6_1_1= st.sidebar.checkbox('Mostrar consulta 6.1.1')
 
 if checkbox_mostrar_consulta_6_1_1:
     key+=1
-    st.title('IMPORTACAO\n')
+    st.subheader('6.1.1) IMPORTACAO\n')
+    st.text('Importações vindas do país com código 1.')
 
     st.sidebar.markdown('## Filtro para a tabela Importacao')
 
@@ -66,20 +69,24 @@ if checkbox_mostrar_consulta_6_1_1:
 
 #region checkbox consulta 6.1.2
 
-selectImportacao = """
+selectImportacao1 = """
 
 SELECT *
-FROM IMPORTACAO AS I
+FROM 
+    IMPORTACAO AS I
+    JOIN PAIS as P ON I.pais=P.id
+
 
 """
 
-df_importacao2 = pd.read_sql_query(selectImportacao, conn)
+df_importacao2 = pd.read_sql_query(selectImportacao1, conn)
 
-checkbox_mostrar_consulta_6_1_2 = st.sidebar.checkbox('Mostrar consulta 6.1.2: Importações vindas do país com código 93 e com peso superior a 5 toneladas.')
+checkbox_mostrar_consulta_6_1_2 = st.sidebar.checkbox('Mostrar consulta 6.1.2')
 
 if checkbox_mostrar_consulta_6_1_2:
     key+=1
-    st.title('IMPORTACAO\n')
+    st.subheader('6.1.2) IMPORTACAO\n')
+    st.text('Importações vindas do país com código 93 e com peso superior a 5 toneladas.')
 
     st.sidebar.markdown('## Filtro para a tabela Importacao')
 
@@ -111,27 +118,28 @@ if checkbox_mostrar_consulta_6_1_2:
 
 #region checkbox consulta 6.2.1
 
-selectImportacao = """
+selectImportacao2 = """
 
 SELECT
-  P.pais_nome, F.maximo
+    P.pais_nome, F.maximo
 FROM
-  IMPORTACAO AS I
-  INNER JOIN FRETE as F ON I.frete = F.id
-  INNER JOIN PAIS as P ON I.pais = P.id
+    IMPORTACAO AS I
+    INNER JOIN FRETE as F ON I.frete = F.id
+    INNER JOIN PAIS as P ON I.pais = P.id
 ORDER BY F.maximo ASC
 
 """
 
-df_importacao3 = pd.read_sql_query(selectImportacao, conn)
+df_importacao3 = pd.read_sql_query(selectImportacao2, conn)
 
-checkbox_mostrar_consulta_6_2_1= st.sidebar.checkbox('Mostrar consulta 6.2.1: Nome dos 10 primeiros países que tem frete máximo menor que 500 dólares.')
+checkbox_mostrar_consulta_6_2_1= st.sidebar.checkbox('Mostrar consulta 6.2.1')
 
 if checkbox_mostrar_consulta_6_2_1:
     key+=1
-    st.title('IMPORTACAO\n')
+    st.subheader('6.2.1) IMPORTACAO\n')
+    st.text('Nome dos 10 primeiros países que tem frete máximo menor que 500 dólares.')
 
-    st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins, exibindo somente os nomes dos paises')
+    st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins, exibindo somente os nomes dos paises e os fretes máximos')
 
     fretes_maximos = list(df_importacao3['maximo'].unique())
     fretes_maximos.append('Todos')
@@ -148,24 +156,26 @@ if checkbox_mostrar_consulta_6_2_1:
 
 #region checkbox consulta 6.2.2
 
-selectImportacao = """
+selectImportacao3 = """
 
 SELECT
-  I.ncm, I.pais, S.media, P.pais_nome
+    I.ncm, I.pais, S.media, P.pais_nome
 FROM
-  IMPORTACAO AS I
-  INNER JOIN SEGURO as S ON I.seguro = S.id
-  INNER JOIN PAIS as P ON I.pais = P.id
+    IMPORTACAO AS I
+    INNER JOIN SEGURO as S ON I.seguro = S.id
+    INNER JOIN PAIS as P ON I.pais = P.id
 
 """
 
-df_importacao4 = pd.read_sql_query(selectImportacao, conn)
+df_importacao4 = pd.read_sql_query(selectImportacao3, conn)
 
-checkbox_mostrar_consulta_6_2_2= st.sidebar.checkbox('Mostrar consulta 6.2.2: Importação com seguro medio de 500 dólares e vindo dos ESTADOS UNIDOS.')
+checkbox_mostrar_consulta_6_2_2= st.sidebar.checkbox('Mostrar consulta 6.2.2')
 
 if checkbox_mostrar_consulta_6_2_2:
     key+=1
-    st.title('IMPORTACAO\n')
+    st.subheader('6.2.2) IMPORTACAO\n')
+    st.text('Importação com seguro medio de 500 dólares e vindo dos ESTADOS UNIDOS.')
+    
 
     st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins, exibindo somente os nomes dos paises e os respectivos ncms')
 
@@ -197,24 +207,25 @@ if checkbox_mostrar_consulta_6_2_2:
 
 #region checkbox consulta 6.2.3
 
-selectImportacao = """
+selectImportacao4 = """
 
 SELECT
-  I.ncm, I.pais, F.mediana, P.pais_nome
+    I.ncm, I.pais, F.mediana, P.pais_nome
 FROM
-  IMPORTACAO AS I
-  INNER JOIN FOB_KG as F ON I.fob_kg = F.id
-  INNER JOIN PAIS as P ON I.pais = P.id
+    IMPORTACAO AS I
+    INNER JOIN FOB_KG as F ON I.fob_kg = F.id
+    INNER JOIN PAIS as P ON I.pais = P.id
 
 """
 
-df_importacao5 = pd.read_sql_query(selectImportacao, conn)
+df_importacao5 = pd.read_sql_query(selectImportacao4, conn)
 
-checkbox_mostrar_consulta_6_2_3= st.sidebar.checkbox('Mostrar consulta 6.2.3: Importação com FOB_KG com mediana de 10 e vindo da ITALIA.')
+checkbox_mostrar_consulta_6_2_3= st.sidebar.checkbox('Mostrar consulta 6.2.3: ')
 
 if checkbox_mostrar_consulta_6_2_3:
     key+=1
-    st.title('IMPORTACAO\n')
+    st.subheader('6.2.3) IMPORTACAO\n')
+    st.text('Importação com FOB_KG com mediana de 10 e vindo da ITALIA.')
 
     st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins, exibindo somente os nomes dos paises e os respectivos ncms, além de mediana e nome do país')
 
@@ -243,6 +254,311 @@ if checkbox_mostrar_consulta_6_2_3:
     else:
         mostra_qntd_linhas(df_importacao_filtrado5, keyParam=key)
 #endregion
+
+#region checkbox consulta 6.3.1
+
+selectImportacao5 = """
+
+SELECT I.*, UME.medida, PAIS.pais_nome, NCM.descricao
+
+FROM
+    IMPORTACAO I
+    JOIN PAIS_NCM ON I.ncm = PAIS_NCM.ncm
+    JOIN NCM ON PAIS_NCM.ncm = NCM.numero
+    JOIN UME ON NCM.ume = UME.id
+    JOIN PAIS ON I.pais = PAIS.id
+
+"""
+
+df_importacao10 = pd.read_sql_query(selectImportacao5, conn)
+
+checkbox_mostrar_consulta_6_3_1 =  st.sidebar.checkbox('Mostrar consulta 6.3.1: ')
+
+if checkbox_mostrar_consulta_6_3_1:
+    key+=1
+    st.subheader('6.3.1) IMPORTACAO\n')
+    st.text('Importação com unidade de medida em quilograma, vinda do BRASIL com descrição de produto "outros".')
+
+    st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins, exibindo os nomes dos paises e os respectivos ncms, além da unidade de medida e nome do país')
+
+    #1o filtro
+    medidas = list(df_importacao10['medida'].unique())
+    medidas.append('Todos')
+
+    medida_selecionada = st.sidebar.selectbox('Selecione a unidade de medida para filtrar a tabela', options = medidas, index=0, key=key)
+
+    if medida_selecionada != 'Todos':
+        df_importacao_filtrado7 = df_importacao10.query('medida == @medida_selecionada')
+    else:
+        df_importacao_filtrado7 = df_importacao10
+
+    #2o filtro
+    key+=1
+    paises = list(df_importacao_filtrado7['pais_nome'].unique())
+    paises.append('Todos')
+
+    pais_selecionado = st.sidebar.selectbox('Selecione o nome do país para filtrar tabela', options = paises, index=0, key=key)
+
+    if pais_selecionado != 'Todos':
+        df_importacao_filtrado8 = df_importacao_filtrado7.query('pais_nome == @pais_selecionado')     
+    else:
+        df_importacao_filtrado8 = df_importacao_filtrado7
+
+    #3o filtro
+    key+=1
+    descricoes = list(df_importacao_filtrado8['descricao'].unique())
+    descricoes.append('Todos')
+
+    descricao_selecionada = st.sidebar.selectbox('Selecione a descricao para filtrar tabela', options = descricoes, index=0, key=key)
+    key+=1
+
+    if descricao_selecionada != 'Todos':
+        df_importacao_filtrado9 = df_importacao_filtrado8.query('descricao == @descricao_selecionada')
+        mostra_qntd_linhas(df_importacao_filtrado9, keyParam=key)      
+    else:
+        mostra_qntd_linhas(df_importacao_filtrado8, keyParam=key)
+#endregion
+
+#region checkbox consulta 6.3.2
+
+selectImportacao5 = """
+
+SELECT I.*, UME.medida, PAIS.pais_nome, NCM.descricao
+
+FROM
+    IMPORTACAO I
+    JOIN PAIS_NCM ON I.ncm = PAIS_NCM.ncm
+    JOIN NCM ON PAIS_NCM.ncm = NCM.numero
+    JOIN UME ON NCM.ume = UME.id
+    JOIN PAIS ON I.pais = PAIS.id
+
+"""
+
+df_importacao10 = pd.read_sql_query(selectImportacao5, conn)
+
+checkbox_mostrar_consulta_6_3_2 =  st.sidebar.checkbox('Mostrar consulta 6.3.2: ')
+
+if checkbox_mostrar_consulta_6_3_2:
+    key+=1
+    st.subheader('6.3.2) IMPORTACAO\n')
+    st.text('Importação com unidade de medida em Unidade, vindo da Argentina com descrição de produto "De temperatura".')
+
+    st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins, exibindo os nomes dos paises e os respectivos ncms, além da unidade de medida e nome do país')
+
+    #1o filtro
+    medidas = list(df_importacao10['medida'].unique())
+    medidas.append('Todos')
+
+    medida_selecionada = st.sidebar.selectbox('Selecione a unidade de medida para filtrar a tabela', options = medidas, index=0, key=key)
+
+    if medida_selecionada != 'Todos':
+        df_importacao_filtrado7 = df_importacao10.query('medida == @medida_selecionada')
+    else:
+        df_importacao_filtrado7 = df_importacao10
+
+    #2o filtro
+    key+=1
+    paises = list(df_importacao_filtrado7['pais_nome'].unique())
+    paises.append('Todos')
+
+    pais_selecionado = st.sidebar.selectbox('Selecione o nome do país para filtrar tabela', options = paises, index=0, key=key)
+
+    if pais_selecionado != 'Todos':
+        df_importacao_filtrado8 = df_importacao_filtrado7.query('pais_nome == @pais_selecionado')     
+    else:
+        df_importacao_filtrado8 = df_importacao_filtrado7
+
+    #3o filtro
+    key+=1
+    descricoes = list(df_importacao_filtrado8['descricao'].unique())
+    descricoes.append('Todos')
+
+    descricao_selecionada = st.sidebar.selectbox('Selecione a descricao para filtrar tabela', options = descricoes, index=0, key=key)
+    key+=1
+
+    if descricao_selecionada != 'Todos':
+        df_importacao_filtrado9 = df_importacao_filtrado8.query('descricao == @descricao_selecionada')
+        mostra_qntd_linhas(df_importacao_filtrado9, keyParam=key)      
+    else:
+        mostra_qntd_linhas(df_importacao_filtrado8, keyParam=key)
+#endregion
+
+#region checkbox consulta 6.3.3
+
+selectImportacao5 = """
+
+SELECT I.*, UME.medida, PAIS.pais_nome, NCM.descricao
+
+FROM
+    IMPORTACAO I
+    JOIN PAIS_NCM ON I.ncm = PAIS_NCM.ncm
+    JOIN NCM ON PAIS_NCM.ncm = NCM.numero
+    JOIN UME ON NCM.ume = UME.id
+    JOIN PAIS ON I.pais = PAIS.id
+
+"""
+
+df_importacao20 = pd.read_sql_query(selectImportacao5, conn)
+
+checkbox_mostrar_consulta_6_3_3 =  st.sidebar.checkbox('Mostrar consulta 6.3.3: ')
+
+if checkbox_mostrar_consulta_6_3_3:
+    key+=1
+    st.subheader('6.3.3) IMPORTACAO\n')
+    st.text('Nome do país de origem e o frete médio das importações com maior frete médio com seguro máximo menor que 300 doláres.')
+
+    st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins')
+
+    #1o filtro
+    fretes = list(df_importacao20['frete'].unique())
+    fretes.append('Todos')
+
+    frete_selecionado = st.sidebar.selectbox('Selecione o frete para filtrar a tabela', options = fretes, index=0, key=key)
+
+    if frete_selecionado != 'Todos':
+        df_importacao_filtrado21 = df_importacao20.query('frete == @frete_selecionado')
+    else:
+        df_importacao_filtrado21 = df_importacao20
+
+    #2o filtro
+    key+=1
+    paises = list(df_importacao_filtrado21['pais_nome'].unique())
+    paises.append('Todos')
+
+    pais_selecionado = st.sidebar.selectbox('Selecione o nome do país para filtrar tabela', options = paises, index=0, key=key)
+
+    if pais_selecionado != 'Todos':
+        df_importacao_filtrado22 = df_importacao_filtrado21.query('pais_nome == @pais_selecionado')     
+    else:
+        df_importacao_filtrado22 = df_importacao_filtrado21
+
+    #3o filtro
+    key+=1
+    seguros = list(df_importacao_filtrado22['seguro'].unique())
+    seguros.append('Todos')
+
+    seguro_selecionado = st.sidebar.selectbox('Selecione a descricao para filtrar tabela', options = seguros, index=0, key=key)
+    key+=1
+
+    if seguro_selecionado != 'Todos':
+        df_importacao_filtrado23 = df_importacao_filtrado22.query('seguro == @seguro_selecionado')
+        mostra_qntd_linhas(df_importacao_filtrado23, keyParam=key)      
+    else:
+        mostra_qntd_linhas(df_importacao_filtrado22, keyParam=key)
+#endregion
+
+# #region checkbox consulta 6.4.1
+
+# selectImportacao5 = """
+
+# --SELECT I.PAIS, F.MEDIA,P.PAIS_NOME,S.MAXIMO
+# SELECT COUNT(*)
+# FROM
+#     IMPORTACAO AS I
+#     INNER JOIN PAIS AS P ON P.PAIS_NOME IN ('RUSSIA, FEDERACAO DA')
+#     INNER JOIN FRETE AS F ON F.MEDIA > ('100')
+#     INNER JOIN SEGURO AS S ON S.MAXIMO < ('300')
+
+# """
+
+# df_importacao20 = pd.read_sql_query(selectImportacao5, conn)
+
+# checkbox_mostrar_consulta_6_4_1 =  st.sidebar.checkbox('Mostrar consulta 6.4.1: ')
+
+# if checkbox_mostrar_consulta_6_4_1:
+#     key+=1
+#     st.subheader('6.4.1) IMPORTACAO\n')
+#     st.text('Quantidade de importações com frete médio superior a 100 doláres, com seguro máximo inferior a 300 doláres e vindo da Rússia.')
+
+#     st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins')
+
+#     #1o filtro
+#     fretes = list(df_importacao20['frete'].unique())
+#     fretes.append('Todos')
+
+#     frete_selecionado = st.sidebar.selectbox('Selecione o frete para filtrar a tabela', options = fretes, index=0, key=key)
+
+#     if frete_selecionado != 'Todos':
+#         df_importacao_filtrado21 = df_importacao20.query('frete >= @frete_selecionado')
+#     else:
+#         df_importacao_filtrado21 = df_importacao20
+
+#     #2o filtro
+#     key+=1
+#     paises = list(df_importacao_filtrado21['pais_nome'].unique())
+#     paises.append('Todos')
+
+#     pais_selecionado = st.sidebar.selectbox('Selecione o nome do país para filtrar tabela', options = paises, index=0, key=key)
+
+#     if pais_selecionado != 'Todos':
+#         df_importacao_filtrado22 = df_importacao_filtrado21.query('pais_nome == @pais_selecionado')     
+#     else:
+#         df_importacao_filtrado22 = df_importacao_filtrado21
+
+#     #3o filtro
+#     key+=1
+#     seguros = list(df_importacao_filtrado22['seguro'].unique())
+#     seguros.append('Todos')
+
+#     seguro_selecionado = st.sidebar.selectbox('Selecione a descricao para filtrar tabela', options = seguros, index=0, key=key)
+#     key+=1
+
+#     if seguro_selecionado != 'Todos':
+#         df_importacao_filtrado23 = df_importacao_filtrado22.query('seguro == @seguro_selecionado')
+#         mostra_qntd_linhas(df_importacao_filtrado23, keyParam=key)      
+#     else:
+#         mostra_qntd_linhas(df_importacao_filtrado22, keyParam=key)
+# #endregion
+
+# #region checkbox consulta 6.4.2
+
+# selectImportacao5 = """
+
+# -- SELECT P.PAIS_NOME,F.MAXIMO
+# SELECT COUNT(*)
+# FROM
+#     IMPORTACAO AS I
+#     INNER JOIN PAIS AS P ON P.PAIS_NOME IN ('CHINA, REPUBLICA POPULAR')
+#     INNER JOIN FRETE AS F ON F.MAXIMO < ('500')
+
+# """
+
+# df_importacao20 = pd.read_sql_query(selectImportacao5, conn)
+
+# checkbox_mostrar_consulta_6_4_2 =  st.sidebar.checkbox('Mostrar consulta 6.4.2: ')
+
+# if checkbox_mostrar_consulta_6_4_2:
+#     key+=1
+#     st.subheader('6.4.2) IMPORTACAO\n')
+#     st.text('Quantidade de importações da CHINA com frete máximo menor do que 500 doláres.')
+
+#     st.sidebar.markdown('## Filtro para a tabela Importacao com seus joins')
+
+#     #1o filtro
+#     paises = list(df_importacao5['pais_nome'].unique())
+#     paises.append('Todos')
+
+#     pais_selecionado = st.sidebar.selectbox('Selecione o pais para filtrar a tabela', options = paises, index=0, key=key)
+
+#     if pais_selecionado != 'Todos':
+#         df_importacao_filtrado5 = df_importacao5.query('pais_nome == @pais_selecionado')
+#     else:
+#         df_importacao_filtrado5 = df_importacao5
+
+#     #2o filtro
+#     key+=1
+#     fretes = list(df_importacao_filtrado5['frete'].unique())
+#     fretes.append('Todos')
+
+#     frete_selecionado = st.sidebar.selectbox('Selecione um frete para filtrar tabela', options = fretes, index=0, key=key)
+#     key+=1
+
+#     if frete_selecionado != 'Todos':
+#         df_importacao_filtrado6 = df_importacao_filtrado5.query('frete <= @frete_selecionado')
+#         mostra_qntd_linhas(df_importacao_filtrado6, keyParam=key)      
+#     else:
+#         mostra_qntd_linhas(df_importacao_filtrado5, keyParam=key)
+# #endregion
 
 
 #endregion
